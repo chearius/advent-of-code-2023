@@ -1,0 +1,6 @@
+config:
+    validation: true
+    warningsAsErrors: true
+style:
+    MagicNumber:
+        active: false
