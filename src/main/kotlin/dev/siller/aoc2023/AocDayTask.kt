@@ -4,10 +4,25 @@ import java.io.File
 
 sealed class AocDayTask<RESULT_TASK_1, RESULT_TASK_2>(
     val day: Int,
-    private val exampleInputs: List<String> = emptyList(),
+    private val exampleInputsPart1: List<String> = emptyList(),
+    private val exampleInputsPart2: List<String> = emptyList(),
     private val expectedExampleOutputsPart1: List<RESULT_TASK_1> = emptyList(),
     private val expectedExampleOutputsPart2: List<RESULT_TASK_2> = emptyList()
 ) {
+    constructor(
+        day: Int,
+        exampleInputPart1: String = "",
+        exampleInputPart2: String = "",
+        expectedExampleOutputPart1: RESULT_TASK_1? = null,
+        expectedExampleOutputPart2: RESULT_TASK_2? = null
+    ) : this(
+        day,
+        listOf(exampleInputPart1),
+        listOf(exampleInputPart2),
+        listOfNotNull(expectedExampleOutputPart1),
+        listOfNotNull(expectedExampleOutputPart2)
+    )
+
     constructor(
         day: Int,
         exampleInput: String = "",
@@ -15,6 +30,7 @@ sealed class AocDayTask<RESULT_TASK_1, RESULT_TASK_2>(
         expectedExampleOutputPart2: RESULT_TASK_2? = null
     ) : this(
         day,
+        listOf(exampleInput),
         listOf(exampleInput),
         listOfNotNull(expectedExampleOutputPart1),
         listOfNotNull(expectedExampleOutputPart2)
@@ -42,7 +58,7 @@ sealed class AocDayTask<RESULT_TASK_1, RESULT_TASK_2>(
 
         val part1result =
             try {
-                runPart(1, inputFile, exampleInputs, expectedExampleOutputsPart1, ::runPart1)
+                runPart(1, inputFile, exampleInputsPart1, expectedExampleOutputsPart1, ::runPart1)
             } catch (_: NotImplementedError) {
                 log.warn("No solution for part 1, yet!")
 
@@ -51,7 +67,7 @@ sealed class AocDayTask<RESULT_TASK_1, RESULT_TASK_2>(
 
         val part2result =
             try {
-                runPart(2, inputFile, exampleInputs, expectedExampleOutputsPart2, ::runPart2)
+                runPart(2, inputFile, exampleInputsPart2, expectedExampleOutputsPart2, ::runPart2)
             } catch (_: NotImplementedError) {
                 log.warn("No solution for part 2, yet!\n")
 
