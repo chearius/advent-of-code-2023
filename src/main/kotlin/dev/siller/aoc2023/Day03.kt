@@ -62,7 +62,7 @@ data object Day03 : AocDayTask<Int, Int>(
 
     override fun runPart2(input: List<String>): Int =
         parseSchematic(input).let { schematic ->
-            schematic.symbols.mapNotNull { symbol ->
+            schematic.symbols.sumOf { symbol ->
                 val adjacentPoints =
                     symbol.position.getAdjacentPoints(
                         minX = 0,
@@ -81,9 +81,9 @@ data object Day03 : AocDayTask<Int, Int>(
                 if (adjacentPartNumbers.size == 2) {
                     adjacentPartNumbers[0].number * adjacentPartNumbers[1].number
                 } else {
-                    null
+                    0
                 }
-            }.sum()
+            }
         }
 
     private fun parseSchematic(input: List<String>): Schematic {
