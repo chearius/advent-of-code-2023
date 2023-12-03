@@ -46,10 +46,10 @@ data object Day03 : AocDayTask<Int, Int>(
             schematic.symbols.flatMap { symbol ->
                 val adjacentPoints =
                     symbol.position.getAdjacentPoints(
-                        0,
-                        schematic.width - 1,
-                        0,
-                        schematic.height - 1
+                        minX = 0,
+                        maxX = schematic.width - 1,
+                        minY = 0,
+                        maxY = schematic.height - 1
                     )
 
                 schematic.partNumbers.filter { partNumber ->
@@ -65,10 +65,10 @@ data object Day03 : AocDayTask<Int, Int>(
             schematic.symbols.mapNotNull { symbol ->
                 val adjacentPoints =
                     symbol.position.getAdjacentPoints(
-                        0,
-                        schematic.width - 1,
-                        0,
-                        schematic.height - 1
+                        minX = 0,
+                        maxX = schematic.width - 1,
+                        minY = 0,
+                        maxY = schematic.height - 1
                     )
 
                 val adjacentPartNumbers =
