@@ -104,12 +104,10 @@ sealed class AocDayTask<RESULT_TASK_1, RESULT_TASK_2>(
                     }
 
                 log.info("\tExpected result: {}", expectedOutput.getOrNull(index) ?: "<not specified>")
-                log.info("\tActual result:   {} ({})", result, status)
+                log.info("\tActual result:   {} ({})\n", result, status)
 
                 status
             }
-
-        println()
 
         return if (states.any { rs -> rs == ResultStatus.ERROR }) {
             log.error("There were some incorrect results running the examples!")
@@ -126,7 +124,7 @@ sealed class AocDayTask<RESULT_TASK_1, RESULT_TASK_2>(
             log.info("Running Part {} with puzzle input ...", partNumber)
             val partResult = part(File(input).readLines())
 
-            log.info("Part {} result is: {}", partNumber, partResult)
+            log.info("\tPart {} result is: {}\n", partNumber, partResult)
 
             partResult
         }

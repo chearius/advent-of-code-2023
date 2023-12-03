@@ -11,8 +11,14 @@ data object Day02 : AocDayTask<Int, Int>(
         |Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
         """.trimMargin(),
     expectedExampleOutputPart1 = 8,
-    expectedExampleOutputPart2 = UNKNOWN_RESULT
+    expectedExampleOutputPart2 = 2286
 ) {
+    private const val MAX_RED_CUBES = 12
+
+    private const val MAX_GREEN_CUBES = 13
+
+    private const val MAX_BLUE_CUBES = 14
+
     data class CubeSet(val red: Int, val green: Int, val blue: Int)
 
     data class Game(val id: Int, val grabbedCubeSets: List<CubeSet>)
@@ -20,13 +26,16 @@ data object Day02 : AocDayTask<Int, Int>(
     override fun runPart1(input: List<String>): Int =
         input.map(::toGame).filterNot { game ->
             game.grabbedCubeSets.any { cs ->
-                cs.red > 12 || cs.green > 13 || cs.blue > 14
+                cs.red > MAX_RED_CUBES || cs.green > MAX_GREEN_CUBES || cs.blue > MAX_BLUE_CUBES
             }
         }.map(Game::id).sum()
 
-    override fun runPart2(input: List<String>): Int {
-        TODO("Not yet implemented")
-    }
+    override fun runPart2(input: List<String>): Int =
+        input.map(::toGame).sumOf { game ->
+            val cubes = game.grabbedCubeSets
+
+            cubes.maxOf(CubeSet::red) * cubes.maxOf(CubeSet::blue) * cubes.maxOf(CubeSet::green)
+        }
 
     private fun toGame(line: String): Game {
         val (gamePart, setsPart) = line.split(':', limit = 2)
@@ -37,14 +46,18 @@ data object Day02 : AocDayTask<Int, Int>(
             setsPart.split(';')
                 .map { cubeSet ->
                     val cubes =
-                        cubeSet.split(',').map { c ->
+                        cubeSet.split(',').map(String::trim).associate { c ->
                             val (count, color) = c.split(' ', limit = 2)
                             color to count.toInt()
-                        }.toMap()
+                        }
 
-                    CubeSet(cubes.getOrDefault("red", 0), cubes.getOrDefault("green", 0), cubes.getOrDefault("blue", 0))
+                    CubeSet(
+                        red = cubes.getOrDefault("red", 0),
+                        green = cubes.getOrDefault("green", 0),
+                        blue = cubes.getOrDefault("blue", 0)
+                    )
                 }
-	
+
         return Game(gameId, grabbedCubeSets)
     }
 }
