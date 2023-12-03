@@ -28,7 +28,7 @@ data object Day02 : AocDayTask<Int, Int>(
             game.grabbedCubeSets.any { cs ->
                 cs.red > MAX_RED_CUBES || cs.green > MAX_GREEN_CUBES || cs.blue > MAX_BLUE_CUBES
             }
-        }.map(Game::id).sum()
+        }.sumOf(Game::id)
 
     override fun runPart2(input: List<String>): Int =
         input.map(::toGame).sumOf { game ->
