@@ -1,6 +1,8 @@
-if [ `uname -o` = "Android" ]; then
+#!/usr/bin/env sh
+
+if [ "$(uname -o)" = "Android" ]; then
 	echo "Running on Android"
-	java -Djava.library.path=/data/data/com.termux/files/usr/lib/jansi -jar ./build/libs/advent-of-code-2023-1.0-SNAPSHOT-all.jar $@
-else
-	java -jar ./build/libs/advent-of-code-2023-1.0-SNAPSHOT-all.jar $@
+	JAVA_OPTS="-Djava.library.path=/data/data/com.termux/files/usr/lib/jansi"
 fi
+
+java $JAVA_OPTS -jar ./build/libs/advent-of-code-2023-1.0-SNAPSHOT-all.jar "$@"
