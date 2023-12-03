@@ -1,6 +1,6 @@
 package dev.siller.aoc2023
 
-vcadata object Day04 : AocDayTask<Int, Int>(
+data object Day04 : AocDayTask<Int, Int>(
     day = 4,
     exampleInput =
         """
