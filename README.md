@@ -1,5 +1,7 @@
 # Advent of Code 2023
 
+[![Continuous Integration](https://github.com/chearius/advent-of-code-2023/actions/workflows/continuous-integration.yml/badge.svg?branch=main)](https://github.com/chearius/advent-of-code-2023/actions/workflows/continuous-integration.yml)
+
 My solutions of [Advent of Code 2023 puzzles](https://adventofcode.com/) using Kotlin, 
 Gradle and IntelliJ IDEA (and partly Termux with vim on my Android phone).
 

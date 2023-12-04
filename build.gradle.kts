@@ -21,7 +21,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
 
     // Code compliance
-    id("com.diffplug.spotless") version "6.23.0"
+    id("com.diffplug.spotless") version "6.23.3"
 
     // Dependencies (Java, Kotlin) & Plugins versions
     id("com.github.ben-manes.versions") version "0.50.0"
@@ -43,7 +43,7 @@ dependencies {
     implementation(kotlin("reflect"))
 
     implementation("org.slf4j:slf4j-api:2.0.9")
-    implementation("ch.qos.logback:logback-classic:1.4.13")
+    implementation("ch.qos.logback:logback-classic:1.4.14")
     implementation("org.fusesource.jansi:jansi:2.4.1")
 
     testImplementation(kotlin("test"))

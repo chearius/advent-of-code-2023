@@ -41,7 +41,7 @@ data object Day01 : AocDayTask<Int, Int>(
     override fun runPart2(input: List<String>): Int = input.map(::replaceWordsWithDigits).sumOf(::getCalibrationValue)
 
     private fun getCalibrationValue(line: String): Int {
-        val digits = line.filter { it in '0'..'9' }
+        val digits = line.filter(Char::isDigit)
 
         return "${digits.first()}${digits.last()}".toInt()
     }
