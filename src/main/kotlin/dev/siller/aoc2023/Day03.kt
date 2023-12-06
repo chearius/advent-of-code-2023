@@ -21,14 +21,14 @@ data object Day03 : AocDayTask<Int, Int>(
     expectedExampleOutputPart1 = 4361,
     expectedExampleOutputPart2 = 467835
 ) {
-    data class Schematic(
+    private data class Schematic(
         val partNumbers: List<PartNumber>,
         val symbols: List<Symbol>,
         val width: Int,
         val height: Int
     )
 
-    data class PartNumber(
+    private data class PartNumber(
         val number: Int,
         val startPosition: Point
     ) {
@@ -36,7 +36,7 @@ data object Day03 : AocDayTask<Int, Int>(
             (0..<number.toString().length).map { i -> startPosition + Vector(i, 0) }
     }
 
-    data class Symbol(
+    private data class Symbol(
         val symbol: Char,
         val position: Point
     )

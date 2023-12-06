@@ -19,9 +19,9 @@ data object Day02 : AocDayTask<Int, Int>(
 
     private const val MAX_BLUE_CUBES = 14
 
-    data class CubeSet(val red: Int, val green: Int, val blue: Int)
+    private data class CubeSet(val red: Int, val green: Int, val blue: Int)
 
-    data class Game(val id: Int, val grabbedCubeSets: List<CubeSet>)
+    private data class Game(val id: Int, val grabbedCubeSets: List<CubeSet>)
 
     override fun runPart1(input: List<String>): Int =
         input.map(::toGame).filterNot { game ->

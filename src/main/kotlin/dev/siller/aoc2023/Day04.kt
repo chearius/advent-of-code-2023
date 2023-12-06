@@ -19,7 +19,7 @@ data object Day04 : AocDayTask<Int, Int>(
 ) {
     private val WHITESPACES = "\\s+".toRegex()
 
-    data class ScratchCard(
+    private data class ScratchCard(
         val id: Int,
         val winningNumbers: Set<Int>,
         val ownNumbers: Set<Int>
