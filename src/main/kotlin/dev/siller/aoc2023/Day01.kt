@@ -1,6 +1,6 @@
 package dev.siller.aoc2023
 
-data object Day01 : AocDayTask<Int, Int>(
+data object Day01 : AocDayTask<UInt, UInt>(
     day = 1,
     exampleInputPart1 =
         """
@@ -19,8 +19,8 @@ data object Day01 : AocDayTask<Int, Int>(
         |zoneight234
         |7pqrstsixteen
         """.trimMargin(),
-    expectedExampleOutputPart1 = 142,
-    expectedExampleOutputPart2 = 281
+    expectedExampleOutputPart1 = 142u,
+    expectedExampleOutputPart2 = 281u
 ) {
     private val WORDS_TO_DIGITS =
         mapOf(
@@ -36,14 +36,14 @@ data object Day01 : AocDayTask<Int, Int>(
             "zero" to '0'
         )
 
-    override fun runPart1(input: List<String>): Int = input.sumOf(::getCalibrationValue)
+    override fun runPart1(input: List<String>): UInt = input.sumOf(::getCalibrationValue)
 
-    override fun runPart2(input: List<String>): Int = input.map(::replaceWordsWithDigits).sumOf(::getCalibrationValue)
+    override fun runPart2(input: List<String>): UInt = input.map(::replaceWordsWithDigits).sumOf(::getCalibrationValue)
 
-    private fun getCalibrationValue(line: String): Int {
+    private fun getCalibrationValue(line: String): UInt {
         val digits = line.filter(Char::isDigit)
 
-        return "${digits.first()}${digits.last()}".toInt()
+        return "${digits.first()}${digits.last()}".toUInt()
     }
 
     private fun replaceWordsWithDigits(line: String): String =

@@ -1,14 +1,13 @@
 package dev.siller.aoc2023
 
-import kotlin.math.max
-import kotlin.math.min
+import dev.siller.aoc2023.util.Interval
 
-data object Day05 : AocDayTask<Long, Long>(
+data object Day05 : AocDayTask<ULong, ULong>(
     day = 5,
     exampleInput =
         """
         |seeds: 79 14 55 13
-
+        |
         |seed-to-soil map:
         |50 98 2
         |52 50 48
@@ -41,11 +40,11 @@ data object Day05 : AocDayTask<Long, Long>(
         |60 56 37
         |56 93 4            
         """.trimMargin(),
-    expectedExampleOutputPart1 = 35,
-    expectedExampleOutputPart2 = 46
+    expectedExampleOutputPart1 = 35u,
+    expectedExampleOutputPart2 = 46u
 ) {
     private data class Almanac(
-        val seeds: List<Long>,
+        val seeds: List<ULong>,
         val seedToSoil: Mapping,
         val soilToFertilizer: Mapping,
         val fertilizerToWater: Mapping,
@@ -58,7 +57,7 @@ data object Day05 : AocDayTask<Long, Long>(
     private data class Mapping(
         val transformations: List<Transformation>
     ) {
-        operator fun invoke(source: Interval): List<Interval> =
+        fun map(source: Interval): List<Interval> =
             transformations.mapNotNull { transformation ->
                 transformation.sourceInterval.intersect(source)?.offset(transformation.destinationOffset)
             }
@@ -69,54 +68,39 @@ data object Day05 : AocDayTask<Long, Long>(
         val destinationOffset: Long
     )
 
-    private data class Interval(
-        val start: Long,
-        val end: Long
-    ) {
-        fun intersect(other: Interval): Interval? =
-            if (this.end >= other.start && this.start <= other.end) {
-                Interval(max(start, other.start), min(end, other.end))
-            } else {
-                null
-            }
-
-        fun offset(offset: Long): Interval = Interval(start + offset, end + offset)
-    }
-
-    override fun runPart1(input: List<String>): Long =
+    override fun runPart1(input: List<String>): ULong =
         parseAlmanac(input).run {
             seeds
                 .map { seed -> Interval(seed, seed) }
                 .asSequence()
-                .flatMap(seedToSoil::invoke)
-                .flatMap(soilToFertilizer::invoke)
-                .flatMap(fertilizerToWater::invoke)
-                .flatMap(waterToLight::invoke)
-                .flatMap(lightToTemperature::invoke)
-                .flatMap(temperatureToHumidity::invoke)
-                .flatMap(humidityToLocation::invoke)
-                .map(Interval::start)
-                .min()
+                .flatMap(seedToSoil::map)
+                .flatMap(soilToFertilizer::map)
+                .flatMap(fertilizerToWater::map)
+                .flatMap(waterToLight::map)
+                .flatMap(lightToTemperature::map)
+                .flatMap(temperatureToHumidity::map)
+                .flatMap(humidityToLocation::map)
+                .minOf(Interval::start)
         }
 
-    override fun runPart2(input: List<String>): Long =
+    override fun runPart2(input: List<String>): ULong =
         parseAlmanac(input).run {
             seeds
                 .chunked(2)
-                .map { seed -> Interval(seed[0], seed[0] + seed[1] - 1) }
+                .map { seed -> Interval(seed[0], seed[0] + seed[1] - 1u) }
                 .asSequence()
-                .flatMap(seedToSoil::invoke)
-                .flatMap(soilToFertilizer::invoke)
-                .flatMap(fertilizerToWater::invoke)
-                .flatMap(waterToLight::invoke)
-                .flatMap(lightToTemperature::invoke)
-                .flatMap(temperatureToHumidity::invoke)
-                .flatMap(humidityToLocation::invoke)
+                .flatMap(seedToSoil::map)
+                .flatMap(soilToFertilizer::map)
+                .flatMap(fertilizerToWater::map)
+                .flatMap(waterToLight::map)
+                .flatMap(lightToTemperature::map)
+                .flatMap(temperatureToHumidity::map)
+                .flatMap(humidityToLocation::map)
                 .minOf(Interval::start)
         }
 
     private fun parseAlmanac(input: List<String>): Almanac {
-        val seeds = mutableListOf<Long>()
+        val seeds = mutableListOf<ULong>()
         val seedToSoil = mutableListOf<Transformation>()
         val soilToFertilizer = mutableListOf<Transformation>()
         val fertilizerToWater = mutableListOf<Transformation>()
@@ -129,7 +113,7 @@ data object Day05 : AocDayTask<Long, Long>(
 
         for (line in input) {
             if (line.startsWith("seeds: ")) {
-                seeds.addAll(line.split("\\s+".toRegex()).drop(1).map(String::toLong))
+                seeds.addAll(line.split("\\s+".toRegex()).drop(1).map(String::toULong))
             } else if (line == "seed-to-soil map:") {
                 currentTransformationList = seedToSoil
             } else if (line == "soil-to-fertilizer map:") {
@@ -146,16 +130,16 @@ data object Day05 : AocDayTask<Long, Long>(
                 currentTransformationList = humidityToLocation
             } else if (line.matches("\\d+ \\d+ \\d+".toRegex())) {
                 val (destinationRangeStart, sourceRangeStart, rangeLength) =
-                    line.split("\\s+".toRegex(), limit = 3).map(String::toLong)
+                    line.split("\\s+".toRegex(), limit = 3).map(String::toULong)
 
                 currentTransformationList +=
                     Transformation(
                         sourceInterval =
                             Interval(
                                 start = sourceRangeStart,
-                                end = sourceRangeStart + rangeLength - 1
+                                end = sourceRangeStart + rangeLength - 1u
                             ),
-                        destinationOffset = destinationRangeStart - sourceRangeStart
+                        destinationOffset = destinationRangeStart.toLong() - sourceRangeStart.toLong()
                     )
             }
         }
@@ -174,24 +158,24 @@ data object Day05 : AocDayTask<Long, Long>(
 
     private fun fillSourceIntervals(transformations: List<Transformation>): List<Transformation> {
         if (transformations.isEmpty()) {
-            listOf(Transformation(Interval(0, Long.MAX_VALUE), destinationOffset = 0))
+            listOf(Transformation(Interval(0u, ULong.MAX_VALUE), destinationOffset = 0))
         }
 
         val sortedTransformations = transformations.sortedBy { transformation -> transformation.sourceInterval.start }
         val allTransformations = mutableListOf<Transformation>()
 
-        var lastEnd = 0L
+        var lastEnd = 0uL
 
-        if (sortedTransformations[0].sourceInterval.start > 0) {
-            lastEnd = sortedTransformations[0].sourceInterval.start - 1
-            allTransformations.add(Transformation(Interval(0, lastEnd), destinationOffset = 0))
+        if (sortedTransformations[0].sourceInterval.start > 0u) {
+            lastEnd = sortedTransformations[0].sourceInterval.start - 1u
+            allTransformations.add(Transformation(Interval(0u, lastEnd), destinationOffset = 0))
         }
 
         for (transformation in sortedTransformations) {
-            if (transformation.sourceInterval.start > lastEnd + 1) {
+            if (transformation.sourceInterval.start > lastEnd + 1u) {
                 allTransformations.add(
                     Transformation(
-                        Interval(lastEnd + 1, transformation.sourceInterval.start - 1),
+                        Interval(lastEnd + 1u, transformation.sourceInterval.start - 1u),
                         destinationOffset = 0
                     )
                 )
@@ -201,8 +185,8 @@ data object Day05 : AocDayTask<Long, Long>(
             lastEnd = transformation.sourceInterval.end
         }
 
-        if (lastEnd < Long.MAX_VALUE) {
-            allTransformations.add(Transformation(Interval(lastEnd + 1, Long.MAX_VALUE), destinationOffset = 0))
+        if (lastEnd < ULong.MAX_VALUE) {
+            allTransformations.add(Transformation(Interval(lastEnd + 1u, ULong.MAX_VALUE), destinationOffset = 0))
         }
 
         return allTransformations

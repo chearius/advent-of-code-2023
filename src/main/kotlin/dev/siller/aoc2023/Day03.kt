@@ -3,7 +3,7 @@ package dev.siller.aoc2023
 import dev.siller.aoc2023.util.Point
 import dev.siller.aoc2023.util.Vector
 
-data object Day03 : AocDayTask<Int, Int>(
+data object Day03 : AocDayTask<UInt, UInt>(
     day = 3,
     exampleInput =
         """
@@ -18,18 +18,18 @@ data object Day03 : AocDayTask<Int, Int>(
         |...$.*....
         |.664.598..
         """.trimMargin(),
-    expectedExampleOutputPart1 = 4361,
-    expectedExampleOutputPart2 = 467835
+    expectedExampleOutputPart1 = 4361u,
+    expectedExampleOutputPart2 = 467835u
 ) {
     private data class Schematic(
         val partNumbers: List<PartNumber>,
         val symbols: List<Symbol>,
-        val width: Int,
-        val height: Int
+        val width: UInt,
+        val height: UInt
     )
 
     private data class PartNumber(
-        val number: Int,
+        val number: UInt,
         val startPosition: Point
     ) {
         val points: List<Point> =
@@ -41,15 +41,15 @@ data object Day03 : AocDayTask<Int, Int>(
         val position: Point
     )
 
-    override fun runPart1(input: List<String>): Int =
+    override fun runPart1(input: List<String>): UInt =
         parseSchematic(input).let { schematic ->
             schematic.symbols.flatMap { symbol ->
                 val adjacentPoints =
                     symbol.position.getAdjacentPoints(
                         minX = 0,
-                        maxX = schematic.width - 1,
+                        maxX = schematic.width.toInt() - 1,
                         minY = 0,
-                        maxY = schematic.height - 1
+                        maxY = schematic.height.toInt() - 1
                     )
 
                 schematic.partNumbers.filter { partNumber ->
@@ -60,15 +60,15 @@ data object Day03 : AocDayTask<Int, Int>(
             }.sumOf(PartNumber::number)
         }
 
-    override fun runPart2(input: List<String>): Int =
+    override fun runPart2(input: List<String>): UInt =
         parseSchematic(input).let { schematic ->
             schematic.symbols.sumOf { symbol ->
                 val adjacentPoints =
                     symbol.position.getAdjacentPoints(
                         minX = 0,
-                        maxX = schematic.width - 1,
+                        maxX = schematic.width.toInt() - 1,
                         minY = 0,
-                        maxY = schematic.height - 1
+                        maxY = schematic.height.toInt() - 1
                     )
 
                 val adjacentPartNumbers =
@@ -81,7 +81,7 @@ data object Day03 : AocDayTask<Int, Int>(
                 if (adjacentPartNumbers.size == 2) {
                     adjacentPartNumbers[0].number * adjacentPartNumbers[1].number
                 } else {
-                    0
+                    0u
                 }
             }
         }
@@ -105,7 +105,7 @@ data object Day03 : AocDayTask<Int, Int>(
 
                     else -> {
                         if (partNumber.isNotBlank()) {
-                            partNumbers += PartNumber(partNumber.toInt(), Point(startX, y))
+                            partNumbers += PartNumber(partNumber.toUInt(), Point(startX, y))
                             partNumber = ""
                         }
 
@@ -117,10 +117,10 @@ data object Day03 : AocDayTask<Int, Int>(
             }
 
             if (partNumber.isNotBlank()) {
-                partNumbers += PartNumber(partNumber.toInt(), Point(startX, y))
+                partNumbers += PartNumber(partNumber.toUInt(), Point(startX, y))
             }
         }
 
-        return Schematic(partNumbers, symbols, input[0].length, input.size)
+        return Schematic(partNumbers, symbols, input[0].length.toUInt(), input.size.toUInt())
     }
 }

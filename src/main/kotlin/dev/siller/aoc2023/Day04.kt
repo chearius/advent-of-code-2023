@@ -3,7 +3,7 @@ package dev.siller.aoc2023
 import java.util.LinkedList
 import kotlin.math.pow
 
-data object Day04 : AocDayTask<Int, Int>(
+data object Day04 : AocDayTask<UInt, UInt>(
     day = 4,
     exampleInput =
         """
@@ -14,40 +14,40 @@ data object Day04 : AocDayTask<Int, Int>(
         |Card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36
         |Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11
         """.trimMargin(),
-    expectedExampleOutputPart1 = 13,
-    expectedExampleOutputPart2 = 30
+    expectedExampleOutputPart1 = 13u,
+    expectedExampleOutputPart2 = 30u
 ) {
     private val WHITESPACES = "\\s+".toRegex()
 
     private data class ScratchCard(
-        val id: Int,
-        val winningNumbers: Set<Int>,
-        val ownNumbers: Set<Int>
+        val id: UInt,
+        val winningNumbers: Set<UInt>,
+        val ownNumbers: Set<UInt>
     ) {
         private val matchingNumbers = winningNumbers.intersect(ownNumbers)
 
-        val matchingNumbersCount = matchingNumbers.size
+        val matchingNumbersCount = matchingNumbers.size.toUInt()
 
-        val wonScratchCardCopiesIds = (id + 1)..(id + matchingNumbersCount)
+        val wonScratchCardCopiesIds = (id + 1u)..(id + matchingNumbersCount)
     }
 
-    override fun runPart1(input: List<String>): Int =
+    override fun runPart1(input: List<String>): UInt =
         input.map(::parseScratchCard)
-            .sumOf { scratchCard -> (2.0).pow(scratchCard.matchingNumbersCount - 1).toInt() }
+            .sumOf { scratchCard -> (2.0).pow((scratchCard.matchingNumbersCount - 1u).toInt()).toUInt() }
 
-    override fun runPart2(input: List<String>): Int =
+    override fun runPart2(input: List<String>): UInt =
         input.map(::parseScratchCard)
             .associateBy { scratchCard -> scratchCard.id }
             .let { scratchCards ->
                 val queue = LinkedList(scratchCards.values)
-                val scratchCardInstances = scratchCards.keys.associateWith { _ -> 1 }.toMutableMap()
+                val scratchCardInstances = scratchCards.keys.associateWith { _ -> 1u }.toMutableMap()
 
                 while (queue.isNotEmpty()) {
                     queue.poll().wonScratchCardCopiesIds.mapNotNull { id ->
                         scratchCards[id]
                     }.forEach { wonScratchCardCopy ->
                         scratchCardInstances[wonScratchCardCopy.id] =
-                            scratchCardInstances.getOrDefault(wonScratchCardCopy.id, 0) + 1
+                            scratchCardInstances.getOrDefault(wonScratchCardCopy.id, 0u) + 1u
                         queue.add(wonScratchCardCopy)
                     }
                 }
@@ -64,9 +64,9 @@ data object Day04 : AocDayTask<Int, Int>(
                 }
 
         return ScratchCard(
-            id = cardPart.filter { c -> c in '0'..'9' }.toInt(),
-            winningNumbers = winningNumbersPart.split(' ').map(String::toInt).toSet(),
-            ownNumbers = ownNumbersPart.split(' ').map(String::toInt).toSet()
+            id = cardPart.filter { c -> c in '0'..'9' }.toUInt(),
+            winningNumbers = winningNumbersPart.split(' ').map(String::toUInt).toSet(),
+            ownNumbers = ownNumbersPart.split(' ').map(String::toUInt).toSet()
         )
     }
 }

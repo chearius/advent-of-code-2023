@@ -1,6 +1,6 @@
 package dev.siller.aoc2023
 
-data object Day02 : AocDayTask<Int, Int>(
+data object Day02 : AocDayTask<UInt, UInt>(
     day = 2,
     exampleInput =
         """
@@ -10,27 +10,27 @@ data object Day02 : AocDayTask<Int, Int>(
         |Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
         |Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
         """.trimMargin(),
-    expectedExampleOutputPart1 = 8,
-    expectedExampleOutputPart2 = 2286
+    expectedExampleOutputPart1 = 8u,
+    expectedExampleOutputPart2 = 2286u
 ) {
-    private const val MAX_RED_CUBES = 12
+    private const val MAX_RED_CUBES = 12u
 
-    private const val MAX_GREEN_CUBES = 13
+    private const val MAX_GREEN_CUBES = 13u
 
-    private const val MAX_BLUE_CUBES = 14
+    private const val MAX_BLUE_CUBES = 14u
 
-    private data class CubeSet(val red: Int, val green: Int, val blue: Int)
+    private data class CubeSet(val red: UInt, val green: UInt, val blue: UInt)
 
-    private data class Game(val id: Int, val grabbedCubeSets: List<CubeSet>)
+    private data class Game(val id: UInt, val grabbedCubeSets: List<CubeSet>)
 
-    override fun runPart1(input: List<String>): Int =
+    override fun runPart1(input: List<String>): UInt =
         input.map(::toGame).filterNot { game ->
             game.grabbedCubeSets.any { cs ->
                 cs.red > MAX_RED_CUBES || cs.green > MAX_GREEN_CUBES || cs.blue > MAX_BLUE_CUBES
             }
         }.sumOf(Game::id)
 
-    override fun runPart2(input: List<String>): Int =
+    override fun runPart2(input: List<String>): UInt =
         input.map(::toGame).sumOf { game ->
             val cubes = game.grabbedCubeSets
 
@@ -40,7 +40,7 @@ data object Day02 : AocDayTask<Int, Int>(
     private fun toGame(line: String): Game {
         val (gamePart, setsPart) = line.split(':', limit = 2)
 
-        val gameId = gamePart.filter { it in '0'..'9' }.toInt()
+        val gameId = gamePart.filter { it in '0'..'9' }.toUInt()
 
         val grabbedCubeSets =
             setsPart.split(';')
@@ -48,13 +48,13 @@ data object Day02 : AocDayTask<Int, Int>(
                     val cubes =
                         cubeSet.split(',').map(String::trim).associate { c ->
                             val (count, color) = c.split(' ', limit = 2)
-                            color to count.toInt()
+                            color to count.toUInt()
                         }
 
                     CubeSet(
-                        red = cubes.getOrDefault("red", 0),
-                        green = cubes.getOrDefault("green", 0),
-                        blue = cubes.getOrDefault("blue", 0)
+                        red = cubes.getOrDefault("red", 0u),
+                        green = cubes.getOrDefault("green", 0u),
+                        blue = cubes.getOrDefault("blue", 0u)
                     )
                 }
 
