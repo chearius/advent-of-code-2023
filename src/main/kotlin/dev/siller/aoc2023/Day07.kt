@@ -13,21 +13,21 @@ data object Day07 : AocDayTask<UInt, UInt>(
     expectedExampleOutputPart1 = 6440u,
     expectedExampleOutputPart2 = 5905u
 ) {
-    private enum class Card(val id: Char, val value: UInt) {
-        ACE('A', 14u),
-        KING('K', 13u),
-        QUEEN('Q', 12u),
-        JACK('J', 11u),
-        TEN('T', 10u),
-        NINE('9', 9u),
-        EIGHT('8', 8u),
-        SEVEN('7', 7u),
-        SIX('6', 6u),
-        FIVE('5', 5u),
-        FOUR('4', 4u),
-        THREE('3', 3u),
-        TWO('2', 2u),
-        JOKER('*', 1u)
+    private enum class Card(val id: Char) {
+        JOKER('*'),
+        TWO('2'),
+        THREE('3'),
+        FOUR('4'),
+        FIVE('5'),
+        SIX('6'),
+        SEVEN('7'),
+        EIGHT('8'),
+        NINE('9'),
+        TEN('T'),
+        JACK('J'),
+        QUEEN('Q'),
+        KING('K'),
+        ACE('A')
     }
 
     private enum class HandType {
@@ -114,7 +114,7 @@ data object Day07 : AocDayTask<UInt, UInt>(
     override fun runPart2(input: List<String>): UInt =
         input
             .asSequence()
-            .map { line -> line.replace('J', '*') }
+            .map { line -> line.replace(Card.JACK.id, Card.JOKER.id) } // replace Jack with Joker
             .map(::parseHandWithBid)
             .sortedWith(compareHands)
             .mapIndexed { index, handWithBid ->
@@ -140,7 +140,7 @@ data object Day07 : AocDayTask<UInt, UInt>(
             hand2.cards
                 .zip(hand1.cards)
                 .map { (card1, card2) ->
-                    card2.value.compareTo(card1.value)
+                    card2.compareTo(card1)
                 }
                 .firstOrNull { result -> result != 0 } ?: 0
         } else {
