@@ -106,8 +106,8 @@ data object Day07 : AocDayTask<UInt, UInt>(
         input
             .map(::parseHandWithBid)
             .sortedWith(compareHands)
-            .mapIndexed { index, handWithBid ->
-                handWithBid.bid * (index.toUInt() + 1u)
+            .mapIndexed { index, (_, bid) ->
+                bid * (index.toUInt() + 1u)
             }
             .sum()
 
@@ -117,8 +117,8 @@ data object Day07 : AocDayTask<UInt, UInt>(
             .map { line -> line.replace(Card.JACK.id, Card.JOKER.id) } // replace Jack with Joker
             .map(::parseHandWithBid)
             .sortedWith(compareHands)
-            .mapIndexed { index, handWithBid ->
-                handWithBid.bid * (index.toUInt() + 1u)
+            .mapIndexed { index, (_, bid) ->
+                bid * (index.toUInt() + 1u)
             }
             .sum()
 
