@@ -40,7 +40,11 @@ data class Vector(
             .filter { point -> point.x in minX..maxX && point.y in minY..maxY }
             .toSet()
 
+    operator fun minus(vector: Vector): Vector = Vector(x - vector.x, y - vector.y)
+
     operator fun plus(vector: Vector): Vector = Vector(x + vector.x, y + vector.y)
 
     operator fun times(scale: Int): Vector = Vector(x * scale, y * scale)
+
+    fun reversed(): Vector = Vector(-x, -y)
 }
